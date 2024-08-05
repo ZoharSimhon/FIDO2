@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Lecture Time and View Attendance</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body onload="checkLogin()">
+    <header>
+        <h1>Lecture Attendance System</h1>
+        <button onclick="logout()">Logout</button>
+    </header>
+    
+    <main>
+        <section id="selection">
+            <h2>Select Lecture Time</h2>
+            <select id="lecture-time">
+                <option value="">Select a time...</option>
+                <option value="09:00">09:00 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="14:00">02:00 PM</option>
+                <option value="16:00">04:00 PM</option>
+            </select>
+            <button onclick="viewAttendance()">View Attendance</button>
+        </section>
+        
+        <section id="attendance" style="display: none;">
+            <h2>Attendance</h2>
+            <ul id="attendance-list"></ul>
+            <a href="mark-attendance.html">Mark Attendance</a>
+        </section>
+
+        <section id="fingerprint-section">
+            <button onclick="registerFingerprint()">Register Fingerprint</button>
+        </section>
+    </main>
+    
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script src="webauthn.js"></script>
+</body>
+</html>

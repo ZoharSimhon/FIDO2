@@ -1,0 +1,90 @@
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (username === 'student' && password === 'student') {
+        localStorage.setItem('role', 'student');
+        localStorage.setItem('username', username);
+        window.location.href = 'mark-attendance.html';
+    } else if (username === 'lecturer' && password === 'lecturer') {
+        localStorage.setItem('role', 'lecturer');
+        localStorage.setItem('username', username);
+        window.location.href = 'index.html';
+    } else {
+        document.getElementById('error-message').style.display = 'block';
+    }
+});
+
+function checkLogin() {
+    const username = localStorage.getItem('username');
+    const role = localStorage.getItem('role');
+    
+    if (username) {
+        // Show fingerprint buttons if logged in
+        document.getElementById('register-fingerprint').style.display = 'inline-block';
+        document.getElementById('login-fingerprint').style.display = 'inline-block';
+    }
+}
+
+async function register() {
+    const username = localStorage.getItem('username');
+    if (!username) {
+        alert('You must be logged in to register a fingerprint.');
+        return;
+    }
+
+    const publicKey = {
+        rp: {
+            name: "Example App",
+        },
+        user: {
+            id: new Uint8Array(16), // Random ID for the user
+            name: username,
+            displayName: username,
+        },
+        challenge: new Uint8Array([0x05]), // Random challenge
+        pubKeyCredParams: [
+            { type: "public-key", alg: -7 }, // ES256
+        ],
+        timeout: 60000,
+        authenticatorSelection: {
+            authenticatorAttachment: "platform",
+            requireResidentKey: false,
+            userVerification: "preferred",
+        },
+        attestation: "direct",
+    };
+
+    const credential = await navigator.credentials.create({ publicKey });
+    console.log('Credential created:', credential);
+
+    localStorage.setItem('webauthn-credential', JSON.stringify(credential));
+    alert('Registration successful!');
+}
+
+async function loginWithFingerprint() {
+    const username = localStorage.getItem('username');
+    if (!username) {
+        alert('You must be logged in to use fingerprint login.');
+        return;
+    }
+
+    const publicKey = {
+        challenge: new Uint8Array([0x05]), // Random challenge
+        allowCredentials: [
+            {
+                type: 'public-key',
+                id: new Uint8Array(JSON.parse(localStorage.getItem('webauthn-credential')).rawId),
+            }
+        ],
+        timeout: 60000,
+        userVerification: 'preferred',
+    };
+
+    const assertion = await navigator.credentials.get({ publicKey });
+    console.log('Assertion received:', assertion);
+
+    alert('Login successful!');
+}
