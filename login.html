@@ -15,16 +15,20 @@
         <section id="login">
             <h2>Login</h2>
             <form id="login-form">
-                <label for="username">Username:</label>
-                <input type="text" id="username" placeholder="Enter username" required>
+                <div>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
                 
-                <label for="password">Password:</label>
-                <input type="password" id="password" placeholder="Enter password" required>
+                <div>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
                 
                 <button type="submit">Login</button>
             </form>
-            <div id="error-message" style="color: red; display: none;">Invalid username or password.</div>
-            <button onclick="loginWithFingerprint()">Login with Fingerprint</button>
+                <div id="error-message" style="color: red; display: none;">Invalid username or password.</div>
+                <button style="margin-top: 20px;" onclick="loginWithFingerprint()">Login with Fingerprint</button>
         </section>
     </main>
     
