@@ -1,5 +1,6 @@
 async function registerFingerprint() {
     const username = localStorage.getItem('username');
+    const role = localStorage.getItem('role');
     if (!username) {
         alert('You must be logged in to register a fingerprint.');
         return;
@@ -42,7 +43,8 @@ async function registerFingerprint() {
             response: {
                 attestationObject: btoa(String.fromCharCode(...new Uint8Array(credential.response.attestationObject))),
                 clientDataJSON: btoa(String.fromCharCode(...new Uint8Array(credential.response.clientDataJSON))),
-            }
+            },
+            role
         }));
         alert('Fingerprint registered successfully!');
     } catch (error) {
@@ -57,7 +59,7 @@ async function loginWithFingerprint() {
         return;
     }
 
-    const { id: rawIdBase64 } = JSON.parse(credentialData);
+    const { id: rawIdBase64, role } = JSON.parse(credentialData);
 
     // Convert base64 rawId to Uint8Array
     const rawId = new Uint8Array(atob(rawIdBase64).split('').map(char => char.charCodeAt(0)));
@@ -79,7 +81,7 @@ async function loginWithFingerprint() {
         console.log('Assertion received:', assertion);
 
         // Simulate successful login
-        localStorage.setItem('role', 'student'); // Adjust role as needed
+        localStorage.setItem('role', role); // Adjust role as needed
         window.location.href = 'mark-attendance.html';
     } catch (error) {
         console.error('Error during authentication:', error);
