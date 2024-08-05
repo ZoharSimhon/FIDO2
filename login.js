@@ -11,24 +11,15 @@ document.getElementById('login-form').addEventListener('submit', function (event
         student3: { password: 'student3', role: 'student' }
     };
 
-    if (username in users && password === users[username][password]) {
-        localStorage.setItem('role', users[username][role]);
+    if (username in users && password === users[username].password) {
+        localStorage.setItem('role', users[username].role);
         localStorage.setItem('username', username);
-        window.location.href = users[username][role] === 'student' ? 'mark-attendance.html' : 'index.html';
+        window.location.href = users[username].role === 'student' ? 'mark-attendance.html' : 'index.html';
     } else {
+        console.log(username in users, users[username].password);
+        
         document.getElementById('error-message').style.display = 'block';
     }
-    // if (username === 'student' && password === 'student') {
-    //     localStorage.setItem('role', 'student');
-    //     localStorage.setItem('username', username);
-    //     window.location.href = 'mark-attendance.html';
-    // } else if (username === 'lecturer' && password === 'lecturer') {
-    //     localStorage.setItem('role', 'lecturer');
-    //     localStorage.setItem('username', username);
-    //     window.location.href = 'index.html';
-    // } else {
-    //     document.getElementById('error-message').style.display = 'block';
-    // }
 });
 
 function checkLogin() {
