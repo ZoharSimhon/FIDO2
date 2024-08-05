@@ -1,26 +1,40 @@
-document.getElementById('login-form').addEventListener('submit', function(event) {
+document.getElementById('login-form').addEventListener('submit', function (event) {
     event.preventDefault();
-    
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    if (username === 'student' && password === 'student') {
-        localStorage.setItem('role', 'student');
+    const users = {
+        lecturer: { password: 'lecturer', role: 'lecturer' },
+        student1: { password: 'student1', role: 'student' },
+        student2: { password: 'student2', role: 'student' },
+        student3: { password: 'student3', role: 'student' }
+    };
+
+    if (username in users && password === users[username][password]) {
+        localStorage.setItem('role', users[username][role]);
         localStorage.setItem('username', username);
-        window.location.href = 'mark-attendance.html';
-    } else if (username === 'lecturer' && password === 'lecturer') {
-        localStorage.setItem('role', 'lecturer');
-        localStorage.setItem('username', username);
-        window.location.href = 'index.html';
+        window.location.href = users[username][role] === 'student' ? 'mark-attendance.html' : 'index.html';
     } else {
         document.getElementById('error-message').style.display = 'block';
     }
+    // if (username === 'student' && password === 'student') {
+    //     localStorage.setItem('role', 'student');
+    //     localStorage.setItem('username', username);
+    //     window.location.href = 'mark-attendance.html';
+    // } else if (username === 'lecturer' && password === 'lecturer') {
+    //     localStorage.setItem('role', 'lecturer');
+    //     localStorage.setItem('username', username);
+    //     window.location.href = 'index.html';
+    // } else {
+    //     document.getElementById('error-message').style.display = 'block';
+    // }
 });
 
 function checkLogin() {
     const username = localStorage.getItem('username');
     const role = localStorage.getItem('role');
-    
+
     if (username) {
         // Show fingerprint buttons if logged in
         document.getElementById('register-fingerprint').style.display = 'inline-block';
