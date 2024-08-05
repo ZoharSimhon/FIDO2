@@ -5,12 +5,14 @@ async function registerFingerprint() {
         return;
     }
 
+    const userId = generateUserId(username); // Generate a unique user ID based on username or user data
+
     const publicKey = {
         rp: {
             name: "Example App",
         },
         user: {
-            id: new Uint8Array(16), // Random ID for the user
+            id: userId, // Use unique user ID
             name: username,
             displayName: username,
         },
@@ -34,8 +36,8 @@ async function registerFingerprint() {
         // Convert rawId to base64 for storage
         const rawIdBase64 = btoa(String.fromCharCode(...new Uint8Array(credential.rawId)));
 
-        // Save the credential in localStorage
-        localStorage.setItem('webauthn-credential', JSON.stringify({
+        // Save the credential in localStorage with user-specific key
+        localStorage.setItem(`webauthn-credential-${username}`, JSON.stringify({
             id: rawIdBase64,
             type: credential.type,
             rawId: rawIdBase64, // Store rawId in base64
@@ -51,9 +53,15 @@ async function registerFingerprint() {
 }
 
 async function loginWithFingerprint() {
-    const credentialData = localStorage.getItem('webauthn-credential');
+    const username = localStorage.getItem('username');
+    if (!username) {
+        alert('You must be logged in to use fingerprint authentication.');
+        return;
+    }
+
+    const credentialData = localStorage.getItem(`webauthn-credential-${username}`);
     if (!credentialData) {
-        alert('No fingerprint registered. Please register first.');
+        alert('No fingerprint registered for this user. Please register first.');
         return;
     }
 
@@ -91,4 +99,10 @@ function generateChallenge(size = 32) {
     const challenge = new Uint8Array(size);
     window.crypto.getRandomValues(challenge);
     return challenge;
+}
+
+// Utility function to generate a user-specific ID
+function generateUserId(username) {
+    // This could be more sophisticated depending on your needs
+    return new TextEncoder().encode(username);
 }
