@@ -1,7 +1,7 @@
 async function registerFingerprint() {
-    const username = document.getElementById('username').value;
+    const username = localStorage.getItem('username');
     if (!username) {
-        alert('Please enter a username to register fingerprint.');
+        alert('You must be logged in to register a fingerprint.');
         return;
     }
 
@@ -10,19 +10,19 @@ async function registerFingerprint() {
             name: "Example App",
         },
         user: {
-            id: new Uint8Array(16), // Generate a unique ID for the user
+            id: new Uint8Array(16), // Random ID for the user
             name: username,
             displayName: username,
         },
-        challenge: new Uint8Array(32), // Generate a random challenge
+        challenge: new Uint8Array(32), // Random challenge
         pubKeyCredParams: [
             { type: "public-key", alg: -7 }, // ES256
         ],
         timeout: 60000,
         authenticatorSelection: {
-            authenticatorAttachment: "platform", // Platform authenticators (like built-in fingerprint readers)
-            requireResidentKey: false, // Not requiring a resident key
-            userVerification: "required", // Require user verification (such as biometrics)
+            authenticatorAttachment: "platform",
+            requireResidentKey: true,
+            userVerification: "required",
         },
         attestation: "direct",
     };
@@ -46,14 +46,12 @@ async function loginWithFingerprint() {
         return;
     }
 
-    const credential = JSON.parse(credentialData);
-
     const publicKey = {
-        challenge: new Uint8Array(32), // Generate a random challenge
+        challenge: new Uint8Array(32), // Random challenge
         allowCredentials: [
             {
                 type: 'public-key',
-                id: new Uint8Array(credential.rawId), // Use the ID from the stored credential
+                id: new Uint8Array(JSON.parse(credentialData).rawId),
             }
         ],
         timeout: 60000,
@@ -64,7 +62,7 @@ async function loginWithFingerprint() {
         const assertion = await navigator.credentials.get({ publicKey });
         console.log('Assertion received:', assertion);
 
-        // Validate the assertion and simulate successful login
+        // Simulate successful login
         localStorage.setItem('role', 'student'); // Adjust role as needed
         window.location.href = 'mark-attendance.html';
     } catch (error) {
