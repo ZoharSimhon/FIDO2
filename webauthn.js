@@ -1,5 +1,11 @@
-async function registerFingerprint() {
-    const username = document.getElementById('username').value;
+function registerFingerprint() {
+    const usernameField = document.getElementById('username');
+    if (!usernameField) {
+        console.error('Username field not found.');
+        return;
+    }
+
+    const username = usernameField.value;
     if (!username) {
         alert('Please enter a username to register fingerprint.');
         return;
