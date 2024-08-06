@@ -92,14 +92,15 @@ async function loginWithFingerprint() {
         timeout: 60000,
         userVerification: 'preferred',
     };
-
+    
+    localStorage.setItem('role', users[username].role);
+    localStorage.setItem('username', username);
+    window.location.href = users[username].role === 'student' ? 'mark-attendance.html' : 'view-attendance.html';
+    
     const assertion = await navigator.credentials.get({ publicKey });
     console.log('Assertion received:', assertion);
 
-    localStorage.setItem('role', users[username].role);
-    localStorage.setItem('username', username);
 
     alert('Login successful!');
 
-    window.location.href = users[username].role === 'student' ? 'mark-attendance.html' : 'view-attendance.html';
 }
