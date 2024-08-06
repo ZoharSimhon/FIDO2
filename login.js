@@ -1,23 +1,22 @@
+
+const users = {
+    lecturer: { password: 'lecturer', role: 'lecturer' },
+    student1: { password: 'student1', role: 'student' },
+    student2: { password: 'student2', role: 'student' },
+    student3: { password: 'student3', role: 'student' }
+};
+
 document.getElementById('login-form').addEventListener('submit', function (event) {
     event.preventDefault();
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    const users = {
-        lecturer: { password: 'lecturer', role: 'lecturer' },
-        student1: { password: 'student1', role: 'student' },
-        student2: { password: 'student2', role: 'student' },
-        student3: { password: 'student3', role: 'student' }
-    };
-
     if (username in users && password === users[username].password) {
         localStorage.setItem('role', users[username].role);
         localStorage.setItem('username', username);
         window.location.href = users[username].role === 'student' ? 'mark-attendance.html' : 'view-attendance.html';
     } else {
-        console.log(username in users, users[username].password);
-        
         document.getElementById('error-message').style.display = 'block';
     }
 });
@@ -70,9 +69,15 @@ async function register() {
 }
 
 async function loginWithFingerprint() {
-    const username = localStorage.getItem('username');
+    const username = document.getElementById('username').value;
+
     if (!username) {
-        alert('You must be logged in to use fingerprint login.');
+        alert('You must enter username.');
+        return;
+    }
+    
+    if(!username in users){
+        alert('This user name does not exist.');
         return;
     }
 
@@ -91,5 +96,10 @@ async function loginWithFingerprint() {
     const assertion = await navigator.credentials.get({ publicKey });
     console.log('Assertion received:', assertion);
 
+    localStorage.setItem('role', users[username].role);
+    localStorage.setItem('username', username);
+
     alert('Login successful!');
+
+    window.location.href = users[username].role === 'student' ? 'mark-attendance.html' : 'view-attendance.html';
 }
