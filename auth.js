@@ -16,7 +16,7 @@ function checkLogin() {
         window.location.href = 'view-attendance.html';
     }
 
-    if (!username in users ){
+    if (!username || !username in users){
         window.location.href = 'index.html';
     }
 }
