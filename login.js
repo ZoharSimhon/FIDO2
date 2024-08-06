@@ -14,7 +14,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
     if (username in users && password === users[username].password) {
         localStorage.setItem('role', users[username].role);
         localStorage.setItem('username', username);
-        window.location.href = users[username].role === 'student' ? 'mark-attendance.html' : 'index.html';
+        window.location.href = users[username].role === 'student' ? 'mark-attendance.html' : 'view-attendance.html';
     } else {
         console.log(username in users, users[username].password);
         
