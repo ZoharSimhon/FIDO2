@@ -1,6 +1,12 @@
+const users = {
+    lecturer: { password: 'lecturer', role: 'lecturer' },
+    student1: { password: 'student1', role: 'student' },
+    student2: { password: 'student2', role: 'student' },
+    student3: { password: 'student3', role: 'student' }
+};
+
 async function registerFingerprint() {
     const username = localStorage.getItem('username');
-    const role = localStorage.getItem('role');
     if (!username) {
         alert('You must be logged in to register a fingerprint.');
         return;
@@ -43,8 +49,7 @@ async function registerFingerprint() {
             response: {
                 attestationObject: btoa(String.fromCharCode(...new Uint8Array(credential.response.attestationObject))),
                 clientDataJSON: btoa(String.fromCharCode(...new Uint8Array(credential.response.clientDataJSON))),
-            },
-            role
+            }
         }));
         alert('Fingerprint registered successfully!');
     } catch (error) {
@@ -59,7 +64,19 @@ async function loginWithFingerprint() {
         return;
     }
 
-    const { id: rawIdBase64, role } = JSON.parse(credentialData);
+    const username = document.getElementById('username').value;
+
+    if (!username) {
+        alert('You must enter username.');
+        return;
+    }
+    
+    if(!username in users){
+        alert('This user name does not exist.');
+        return;
+    }
+
+    const { id: rawIdBase64 } = JSON.parse(credentialData);
 
     // Convert base64 rawId to Uint8Array
     const rawId = new Uint8Array(atob(rawIdBase64).split('').map(char => char.charCodeAt(0)));
@@ -80,9 +97,10 @@ async function loginWithFingerprint() {
         const assertion = await navigator.credentials.get({ publicKey });
         console.log('Assertion received:', assertion);
 
-        // Simulate successful login
-        localStorage.setItem('role', role); // Adjust role as needed
-        window.location.href = 'mark-attendance.html';
+        localStorage.setItem('role', users[username].role);
+        localStorage.setItem('username', username);
+        window.location.href = users[username].role === 'student' ? 'mark-attendance.html' : 'view-attendance.html';
+
     } catch (error) {
         console.error('Error during authentication:', error);
     }
