@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
-<body onload="checkLogin()">
+<body onload="checkLogin(); displayUsername();">
     <header>
         <h1>Lecture Attendance System</h1>
         <button onclick="logout()">Logout</button>
@@ -23,6 +23,7 @@
 
     <main>
         <section id="selection">
+            <h2 id="welcome-message">Hello </h2>
             <h2>Select Lecture Time</h2>
             <select id="lecture-time">
                 <option value="">Select a time...</option>

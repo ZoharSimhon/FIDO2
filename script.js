@@ -65,3 +65,15 @@ function markAttendance() {
     saveAttendanceData();
     alert('Attendance marked successfully!');
 }
+
+function displayUsername() {
+    // Get the username from local storage
+    var username = localStorage.getItem('username');
+    
+    // Check if username exists in local storage
+    if (username) {
+        // Update the content of the <h2> element with the username
+        document.getElementById('welcome-message').textContent = `Hello, ${username}`;
+    }
+}
+
