@@ -68,7 +68,7 @@ async function loginWithFingerprint() {
         return;
     }
     
-    if(!username in users){
+    if(!(username in users)){
         alert('This user name does not exist.');
         return;
     }
