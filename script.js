@@ -39,6 +39,10 @@ function viewAttendance() {
         attendanceList.appendChild(li);
     }
 
+    // Update the <h2> element with the selected time
+    const attendanceHeader = document.querySelector('#attendance h2');
+    attendanceHeader.textContent = `Attendance in time ${time}`;
+
     document.getElementById('selection').style.display = 'none';
     document.getElementById('attendance').style.display = 'block';
 }
