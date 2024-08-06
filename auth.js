@@ -1,10 +1,3 @@
-const users = {
-    lecturer: { password: 'lecturer', role: 'lecturer' },
-    student1: { password: 'student1', role: 'student' },
-    student2: { password: 'student2', role: 'student' },
-    student3: { password: 'student3', role: 'student' }
-};
-
 function checkLogin() {
     const role = localStorage.getItem('role');
     const username = localStorage.getItem('username');
